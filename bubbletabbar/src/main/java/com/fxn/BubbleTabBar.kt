@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.widget.LinearLayout
+import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.viewpager.widget.ViewPager
@@ -162,6 +163,7 @@ class BubbleTabBar : LinearLayout {
                 it.title_size = title_sizeParam
             }
             addView(Bubble(context, it).apply {
+                tag = it.id
                 if (it.checked) {
                     this.isSelected = true
                     oldBubble = this
@@ -181,5 +183,23 @@ class BubbleTabBar : LinearLayout {
 
         }
         invalidate()
+    }
+
+    fun addBadge(@IdRes vararg menuItemIds:Int){
+        menuItemIds.forEach {
+            findViewWithTag<Bubble>(it)?.let {bubble->
+                bubble.addBadge()
+            }
+        }
+    }
+
+    fun removeBadges(@IdRes vararg menuItemIds:Int){
+        menuItemIds.forEach {
+            findViewWithTag<Bubble>(it)?.let {bubble->
+                bubble.removeBadge()
+            }
+        }
+
+
     }
 }

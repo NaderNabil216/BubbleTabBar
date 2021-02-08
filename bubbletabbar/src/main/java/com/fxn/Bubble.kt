@@ -1,5 +1,6 @@
 package com.fxn
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
@@ -9,22 +10,29 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import com.fxn.bubbletabbar.R
 import com.fxn.parser.MenuItem
 import com.fxn.util.collapse
 import com.fxn.util.expand
 import com.fxn.util.setColorStateListAnimator
 
-class Bubble(context: Context, var item: MenuItem) : FrameLayout(context) {
+
+@SuppressLint("ViewConstructor")
+class Bubble(context: Context, private var item: MenuItem) : FrameLayout(context) {
 
     private var icon = ImageView(context)
     private var title = TextView(context)
     private var container = LinearLayout(context)
+    private var iconContainer = ConstraintLayout(context)
+    private var badge = View(context)
 
     private val dpAsPixels = item.horizontal_padding.toInt()
     private val dpAsPixelsVertical = item.vertical_padding.toInt()
     private val dpAsPixelsIcons = item.icon_size.toInt()
-    private val dpAsicon_padding = item.icon_padding.toInt()
+    private val dpAsIconPadding = item.icon_padding.toInt()
 
     init {
         layoutParams = LinearLayout.LayoutParams(
@@ -44,16 +52,42 @@ class Bubble(context: Context, var item: MenuItem) : FrameLayout(context) {
             gravity = Gravity.CENTER
             orientation = LinearLayout.HORIZONTAL
         }
-        icon.apply {
+
+        iconContainer.apply {
+            id = View.generateViewId()
             layoutParams = LayoutParams(dpAsPixelsIcons, dpAsPixelsIcons).apply {
                 gravity = Gravity.CENTER_VERTICAL
             }
+            addView(
+                icon.apply {
+                    id = View.generateViewId()
+                    layoutParams =
+                        LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT).apply {
+                            gravity = Gravity.CENTER_VERTICAL
+                        }
+                }
+            )
+
+            addView(badge.apply {
+                id = View.generateViewId()
+                layoutParams =
+                    ConstraintLayout.LayoutParams(dpAsPixelsIcons /2, dpAsPixelsIcons /2)
+                        .apply {
+                            endToEnd = icon.id
+                            requestLayout()
+                        }
+                background = ContextCompat.getDrawable(context, R.drawable.circule)
+                visibility = View.GONE
+
+            })
         }
+
+
         title.apply {
             layoutParams =
                 LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
-                    setPaddingRelative(dpAsicon_padding, 0, 0, 0)
-                    Log.e("dpAsicon_padding", "-> $dpAsicon_padding")
+                    setPaddingRelative(dpAsIconPadding, 0, 0, 0)
+                    Log.e("dpAsicon_padding", "-> $dpAsIconPadding")
                     gravity = Gravity.CENTER_VERTICAL
                     textAlignment = View.TEXT_ALIGNMENT_GRAVITY
                 }
@@ -84,8 +118,7 @@ class Bubble(context: Context, var item: MenuItem) : FrameLayout(context) {
             icon.setColorFilter(Color.GRAY)
             setOnClickListener(null)
         }
-
-        container.addView(icon)
+        container.addView(iconContainer)
         container.addView(title)
         addView(container)
     }
@@ -106,6 +139,16 @@ class Bubble(context: Context, var item: MenuItem) : FrameLayout(context) {
         } else {
             title.collapse(container, item.iconColor)
         }
+    }
+
+    fun addBadge() {
+        badge.visibility = View.VISIBLE
+        invalidate()
+    }
+
+    fun removeBadge() {
+        badge.visibility = View.GONE
+        invalidate()
     }
 
 }

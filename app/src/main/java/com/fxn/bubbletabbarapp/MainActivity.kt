@@ -37,14 +37,22 @@ class MainActivity : AppCompatActivity() {
         })*/
 
         // The second lambda parameter is not used here since it is the menu item index
-        bubbleTabBar.addBubbleListener { id, _ ->
-            when (id) {
-                R.id.home -> viewpager.currentItem = 0
-                R.id.log -> viewpager.currentItem = 1
-                R.id.doc -> viewpager.currentItem = 2
-                R.id.setting -> viewpager.currentItem = 3
+        bubbleTabBar.addBubbleListener(object : OnBubbleClickListener {
+            override fun onBubbleClick(id: Int, position: Int) {
+                when (id) {
+                    R.id.home -> {
+                        viewpager.currentItem = 0
+                        bubbleTabBar.addBadge(R.id.doc)
+                    }
+                    R.id.log -> viewpager.currentItem = 1
+                    R.id.doc -> {
+                        viewpager.currentItem = 2
+                        bubbleTabBar.removeBadges(R.id.doc)
+                    }
+                    R.id.setting -> viewpager.currentItem = 3
+                }
             }
-        }
+        })
 
         bubbleTabBar.setupBubbleTabBar(viewpager)
         viewpager.setDurationScroll(1000)
@@ -63,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 viewpager
             )
         )
-
+        bubbleTabBar.addBadge(R.id.doc)
     }
 
     private fun getColors(): IntArray {
