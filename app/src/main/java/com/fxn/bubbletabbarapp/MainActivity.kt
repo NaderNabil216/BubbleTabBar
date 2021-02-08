@@ -42,12 +42,12 @@ class MainActivity : AppCompatActivity() {
                 when (id) {
                     R.id.home -> {
                         viewpager.currentItem = 0
-                        bubbleTabBar.addBadge(R.id.doc)
+                        bubbleTabBar.addDotBadge(R.id.doc)
                     }
                     R.id.log -> viewpager.currentItem = 1
                     R.id.doc -> {
                         viewpager.currentItem = 2
-                        bubbleTabBar.removeBadges(R.id.doc)
+                        bubbleTabBar.removeDotBadges(R.id.doc)
                     }
                     R.id.setting -> viewpager.currentItem = 3
                 }
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 viewpager
             )
         )
-        bubbleTabBar.addBadge(R.id.doc)
+        bubbleTabBar.addDotBadge(R.id.doc)
     }
 
     private fun getColors(): IntArray {

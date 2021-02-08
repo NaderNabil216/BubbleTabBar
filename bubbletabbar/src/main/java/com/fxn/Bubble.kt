@@ -141,12 +141,12 @@ class Bubble(context: Context, private var item: MenuItem) : FrameLayout(context
         }
     }
 
-    fun addBadge() {
+    fun addDotBadge() {
         badge.visibility = View.VISIBLE
         invalidate()
     }
 
-    fun removeBadge() {
+    fun removeDotBadge() {
         badge.visibility = View.GONE
         invalidate()
     }

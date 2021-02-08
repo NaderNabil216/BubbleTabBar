@@ -185,18 +185,18 @@ class BubbleTabBar : LinearLayout {
         invalidate()
     }
 
-    fun addBadge(@IdRes vararg menuItemIds:Int){
+    fun addDotBadge(@IdRes vararg menuItemIds:Int){
         menuItemIds.forEach {
             findViewWithTag<Bubble>(it)?.let {bubble->
-                bubble.addBadge()
+                bubble.addDotBadge()
             }
         }
     }
 
-    fun removeBadges(@IdRes vararg menuItemIds:Int){
+    fun removeDotBadges(@IdRes vararg menuItemIds:Int){
         menuItemIds.forEach {
             findViewWithTag<Bubble>(it)?.let {bubble->
-                bubble.removeBadge()
+                bubble.removeDotBadge()
             }
         }
 
